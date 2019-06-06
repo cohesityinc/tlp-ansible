@@ -1,0 +1,6 @@
+---
+- name: Generate node certificates and keystores
+  import_tasks: create_keystores.yml
+
+- name: Copy keystore and truststore
+  import_tasks: copy_keystores.yml

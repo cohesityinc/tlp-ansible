@@ -1,0 +1,9 @@
+---
+- import_role:
+    name: tls_common
+
+- name: Create Cassandra CA
+  import_tasks: create_cassandra_ca.yml
+
+- name: Create Truststore
+  import_tasks: create_cassandra_truststore.yml

@@ -1,0 +1,27 @@
+[ req ]
+distinguished_name     = req_distinguished_name
+prompt                 = no
+output_password        = {{ ssl_conf_output_password }}
+default_bits           = {{ ssl_conf_default_bits }}
+{% if ssl_extensions_enabled %}
+req_extensions         = v3_req
+{% endif %}
+
+[ req_distinguished_name ]
+C                      = {{ ssl_conf_dn_country }}
+ST                     = {{ ssl_conf_dn_state }}
+L                      = {{ ssl_conf_dn_city }}
+O                      = {{ ssl_conf_dn_org }}
+OU                     = {{ ssl_conf_dn_org_unit }}
+CN                     = {{ ssl_conf_dn_common_name }}
+emailAddress           = {{ ssl_conf_dn_email }}
+
+{% if ssl_extensions_enabled %}
+[ v3_req ]
+basicConstraints       = CA:FALSE
+keyUsage               = nonRepudiation, digitalSignature, keyEncipherment
+subjectAltName         = @alt_names
+
+[ alt_names ]
+IP.1 = {{ alt_name_ip1 }}
+{% endif %}

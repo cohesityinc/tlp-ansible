@@ -1,0 +1,17 @@
+---
+- name: Create Cassandra CA
+  hosts: master
+  connection: local
+  gather_facts: False
+  roles:
+    - cassandra_ca
+
+- name: Update node configurations
+  hosts: cassandra_nodes
+  gather_facts: True
+  vars:
+    cluster_name: tlp_lab
+    internode_encryption_enabled: True
+  roles:
+    - node_keystores
+    - cassandra_configuration

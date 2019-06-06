@@ -1,0 +1,39 @@
+---
+required_vars:
+  - cluster_name
+
+num_tokens: 256
+hinted_handoff_enabled: true
+max_hint_window_in_ms: 10800000
+hinted_handoff_throttle_in_kb: 1024
+max_hints_delivery_threads: 2
+data_files_dirs:
+  - /var/lib/cassandra/data 
+commitlog_dir: /var/lib/cassandra/commitlog
+saved_caches_dir: /var/lib/cassandra/saved_caches
+hints_dir: /var/lib/cassandra/hints
+hints_flush_period_in_ms: 10000
+max_hints_file_size_in_mb: 128
+batchlog_replay_throttle_in_kb: 1024
+authenticator: AllowAllAuthenticator
+authorizer: AllowAllAuthorizer
+start_native_transport: true
+native_transport_port: 9042
+start_rpc: false
+rpc_port: 9160
+
+raw_heap_size: "{{ ansible_memtotal_mb | int // 4 }}"
+heap_size_mb: "{{ raw_heap_size }}M"
+young_gen_heap_size_mb: "{{ raw_heap_size | int // 2 }}M"
+
+internode_encryption_enabled: false
+
+server_encryption_options:
+  internode_encryption: none
+  keystore: conf/.keystore
+  keystore_password: cassandra
+  truststore: conf/.truststore
+  truststore_password: cassandra
+  store_type: JKS
+  require_client_auth: false
+  require_endpoint_verification: false

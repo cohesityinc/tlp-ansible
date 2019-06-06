@@ -1,0 +1,15 @@
+cassandra_ca_dir: /tmp/cassandra-tls-lab/cassandra
+cassandra_ca_key: "{{ cassandra_ca_dir }}/ca.key"
+cassandra_ca_cert: "{{ cassandra_ca_dir }}/ca.crt"
+cassandra_truststore: "{{ cassandra_ca_dir }}/truststore.p12"
+
+ssl_conf_output_password: cassandra
+ssl_conf_default_bits: 2048
+ssl_extensions_enabled: False
+ssl_conf_dn_country: US
+ssl_conf_dn_state: NC
+ssl_conf_dn_city: Raleigh
+ssl_conf_dn_org: The Last Pickle
+ssl_conf_dn_org_unit: tls_lab
+ssl_conf_dn_common_name: Cassandra
+ssl_conf_dn_email: tls_lab@thelastpickle.com

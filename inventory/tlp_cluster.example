@@ -1,0 +1,20 @@
+# This is an example inventory file for a cluster that has been provisioned with
+tlp-cluster.
+
+[master]
+localhost
+
+[master:vars]
+ansible_connection = local
+#ansible_python_interpreter = /path/to/python3
+
+[cassandra_nodes]
+List the public IPs of the EC2 instances created by tlp-cluster.
+# 1.2.3.4
+# 5.6.7.8
+# 9.8.7.6
+
+[cassandra_nodes:vars]
+ansible_python_interpreter = /usr/bin/python3
+ansible_private_key_file = ~/.tlp-cluster/profiles/default/secret.pem
+ansible_user = ubuntu
