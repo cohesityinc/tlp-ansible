@@ -4,10 +4,6 @@
     seeds: "{{ groups['cassandra_nodes'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | join(',') }}"
     node_ip: "{{ ansible_default_ipv4.address }}"
 
-- name: Print seeds
-  debug:
-    msg: "SEEDS: {{ seeds }}"
-
 # TODO Find a better, more flexible way for conditionally setting encryption options
 - name: Create internode encryption facts
   set_fact:
@@ -19,7 +15,7 @@
       truststore_password: cassandra
       require_client_auth: true
       require_endpoint_verification: true 
-      store_type: PKCS
+      store_type: PKCS12
   when: internode_encryption_enabled is defined
 
 - name: Generate cassandra.yaml
@@ -27,3 +23,9 @@
   template:
     src: cassandra.yaml.j2
     dest: /etc/cassandra/cassandra.yaml
+
+- name: Start Cassandra
+  become: yes
+  service:
+    name: cassandra
+    state: restarted

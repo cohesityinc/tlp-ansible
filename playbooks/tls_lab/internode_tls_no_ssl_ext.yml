@@ -15,6 +15,7 @@
   vars:
     cluster_name: tlp_lab
     internode_encryption_enabled: True
+    ssl_extensions_disabled: True
   roles:
     - node_keystores
     - cassandra_configuration

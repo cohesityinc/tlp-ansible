@@ -1,4 +1,4 @@
-cassandra_ca_dir: /tmp/cassandra-tls-lab/cassandra
+cassandra_ca_dir: "{{ lookup('env', 'HOME') }}/cassandra-tls-lab/cassandra"
 cassandra_ca_key: "{{ cassandra_ca_dir }}/ca.key"
 cassandra_ca_cert: "{{ cassandra_ca_dir }}/ca.crt"
 cassandra_truststore: "{{ cassandra_ca_dir }}/truststore.p12"

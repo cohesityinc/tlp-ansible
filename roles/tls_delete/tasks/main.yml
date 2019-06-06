@@ -1,0 +1,9 @@
+---
+- import_role:
+    name: tls_common
+
+- name: Delete certs directory
+  file:
+    path: "{{ cassandra_ca_dir }}"
+    state: absent
+  when: tls_reset is defined
