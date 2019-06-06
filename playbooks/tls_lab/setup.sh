@@ -2,18 +2,17 @@
 
 set -e
 
-if [ "$#" -ne 1 ]; then
-  echo "Usage: setup.sh <path to tlp_cluster repo>"
+if [ "$#" -ne 3 ]; then
+  echo "Usage: setup.sh <path to tlp_cluster repo> <client> <ticket>"
   exit 1
 fi
 
 TLS_LAB_DIR=$HOME/cassandra-tls-lab
-
-CLIENT=TLP
-TICKET=BLOG-27
-PURPOSE="Demonstrate internode encryption with hostname verification"
-
 TLP_CLUSTER_HOME=$1
+CLIENT=$2
+TICKET=$3
+PURPOSE="A cluster to demonstrate encryption related features"
+
 
 tlp_cluster() {
   $TLP_CLUSTER_HOME/bin/tlp-cluster "$@"
@@ -37,7 +36,7 @@ tlp_cluster install
 popd
 
 playbook_dir=$(dirname "$BASH_SOURCE[0]")
-inventory_file=$playbook_dir/../../inventory/hosts.test
+inventory_file=$playbook_dir/../../inventory/hosts.tlp_cluster
 
 echo "Creating Ansible inventory file at $inventory_file"
 cat > $inventory_file <<EOF
