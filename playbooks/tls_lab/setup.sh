@@ -2,17 +2,13 @@
 
 set -e
 
-if [ "$#" -ne 3 ]; then
-  echo "Usage: setup.sh <path to tlp_cluster repo> <client> <ticket>"
-  exit 1
-fi
-
-TLS_LAB_DIR=$HOME/cassandra-tls-lab
-TLP_CLUSTER_HOME=$1
-CLIENT=$2
-TICKET=$3
+TLS_LAB_DIR=/tmp/cassandra-tls-lab
+CLIENT=blog.thelastpickle.com
+TICKET=hostname_verification
 PURPOSE="A cluster to demonstrate encryption related features"
 
+PLAYBOOK_DIR=$(dirname "$BASH_SOURCE[0]")
+INVENTORY_FILE=$PLAYBOOK_DIR/../../inventory/hosts.tlp_cluster
 
 tlp_cluster() {
   $TLP_CLUSTER_HOME/bin/tlp-cluster "$@"
@@ -21,6 +17,20 @@ tlp_cluster() {
 get_cassandra_public_ips() {
   cat $TLS_LAB_DIR/terraform.tfstate | jq -r '.modules[0].resources["aws_instance.cassandra.0","aws_instance.cassandra.1","aws_instance.cassandra.2"].primary.attributes.public_ip'
 }
+
+if [ -d "$PLAYBOOK_DIR/../../../tlp-cluster" ]; then
+  TLP_CLUSTER_HOME=$PLAYBOOK_DIR/../../../tlp-cluster
+else
+  if [ "$#" -ne 1 ]; then
+    echo "$PLAYBOOK_DIR/../../../tlp-cluster does not exist."
+    echo "Please rerun setup.sh and specify the path to the tlp-cluster repo."
+    echo
+    echo "Usage: setup.sh <path-to-tlp_cluster-repo>"
+    exit 1
+  else
+    TLP_CLUSTER_HOME=$1
+  fi
+fi
 
 if [ ! -d $TLS_LAB_DIR ]; then
   echo "Creating $TLS_LAB_DIR"
@@ -35,11 +45,8 @@ tlp_cluster use 3.11.4
 tlp_cluster install
 popd
 
-playbook_dir=$(dirname "$BASH_SOURCE[0]")
-inventory_file=$playbook_dir/../../inventory/hosts.tlp_cluster
-
-echo "Creating Ansible inventory file at $inventory_file"
-cat > $inventory_file <<EOF
+echo "Creating Ansible inventory file at $INVENTORY_FILE"
+cat > $INVENTORY_FILE <<EOF
 [master]
 localhost
 
