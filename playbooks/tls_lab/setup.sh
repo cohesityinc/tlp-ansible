@@ -7,8 +7,26 @@ CLIENT=blog.thelastpickle.com
 TICKET=hostname_verification
 PURPOSE="A cluster to demonstrate encryption related features"
 
-PLAYBOOK_DIR=$(dirname "$BASH_SOURCE[0]")
-INVENTORY_FILE=$PLAYBOOK_DIR/../../inventory/hosts.tlp_cluster
+init_paths() {
+  cd $(dirname "$BASH_SOURCE[0]")
+  cd ..
+  PLAYBOOK_DIR=`pwd`
+  INVENTORY_FILE=$PLAYBOOK_DIR/../inventory/hosts.tlp_cluster
+
+  if [ -d "$PLAYBOOK_DIR/../../tlp-cluster" ]; then
+    TLP_CLUSTER_HOME=$PLAYBOOK_DIR/../../tlp-cluster
+  else
+    if [ "$#" -ne 1 ]; then
+      echo "$PLAYBOOK_DIR/../../tlp-cluster does not exist."
+      echo "Please rerun setup.sh and specify the path to the tlp-cluster repo."
+      echo
+      echo "Usage: setup.sh <path-to-tlp_cluster-repo>"
+      exit 1
+    else
+      TLP_CLUSTER_HOME=$1
+    fi
+  fi
+}
 
 tlp_cluster() {
   $TLP_CLUSTER_HOME/bin/tlp-cluster "$@"
@@ -18,19 +36,8 @@ get_cassandra_public_ips() {
   cat $TLS_LAB_DIR/terraform.tfstate | jq -r '.modules[0].resources["aws_instance.cassandra.0","aws_instance.cassandra.1","aws_instance.cassandra.2"].primary.attributes.public_ip'
 }
 
-if [ -d "$PLAYBOOK_DIR/../../../tlp-cluster" ]; then
-  TLP_CLUSTER_HOME=$PLAYBOOK_DIR/../../../tlp-cluster
-else
-  if [ "$#" -ne 1 ]; then
-    echo "$PLAYBOOK_DIR/../../../tlp-cluster does not exist."
-    echo "Please rerun setup.sh and specify the path to the tlp-cluster repo."
-    echo
-    echo "Usage: setup.sh <path-to-tlp_cluster-repo>"
-    exit 1
-  else
-    TLP_CLUSTER_HOME=$1
-  fi
-fi
+
+init_paths
 
 if [ ! -d $TLS_LAB_DIR ]; then
   echo "Creating $TLS_LAB_DIR"
