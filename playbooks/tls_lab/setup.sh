@@ -46,7 +46,7 @@ fi
 
 pushd $TLS_LAB_DIR
 echo "Running tlp-cluster"
-tlp_cluster init $CLIENT $TICKET "$PURPOSE"
+tlp_cluster init --instance c3.large $CLIENT $TICKET "$PURPOSE"
 tlp_cluster up -a
 tlp_cluster use 3.11.4
 tlp_cluster install
