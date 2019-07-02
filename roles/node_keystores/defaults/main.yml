@@ -1,3 +1,3 @@
-ssl_extensions_enabled: "{{ ssl_extensions_disabled is not defined }}"
+ssl_extensions_enabled: True
 ssl_conf_dn_common_name: "{{ inventory_hostname }}"
 alt_name_ip1: "{{ ansible_default_ipv4.address }}"
