@@ -21,7 +21,7 @@
 - name: Generate cassandra.yaml
   become: yes
   template:
-    src: cassandra.yaml.j2
+    src: "cassandra-{{ cassandra_version }}.yaml.j2"
     dest: /etc/cassandra/cassandra.yaml
 
 - name: Start Cassandra

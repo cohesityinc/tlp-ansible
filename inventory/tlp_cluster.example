@@ -18,3 +18,4 @@ List the public IPs of the EC2 instances created by tlp-cluster.
 ansible_python_interpreter = /usr/bin/python3
 ansible_private_key_file = ~/.tlp-cluster/profiles/default/secret.pem
 ansible_user = ubuntu
+cassandra_version = 3.11.4
