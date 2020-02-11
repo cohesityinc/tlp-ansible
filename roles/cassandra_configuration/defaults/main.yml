@@ -21,7 +21,7 @@ start_native_transport: true
 native_transport_port: 9042
 start_rpc: false
 rpc_port: 9160
-
+endpoint_snitch: SimpleSnitch
 raw_heap_size: "{{ ansible_memtotal_mb | int // 4 }}"
 heap_size_mb: "{{ raw_heap_size }}M"
 young_gen_heap_size_mb: "{{ raw_heap_size | int // 2 }}M"
@@ -37,3 +37,7 @@ server_encryption_options:
   store_type: JKS
   require_client_auth: false
   require_endpoint_verification: false
+
+# cassandra-rackdc.properties
+cassandra_rackdc_dc: dc1
+cassandra_rackdc_rack: rack1

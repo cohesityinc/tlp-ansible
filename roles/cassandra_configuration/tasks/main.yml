@@ -24,6 +24,16 @@
     src: "cassandra-{{ cassandra_version }}.yaml.j2"
     dest: /etc/cassandra/cassandra.yaml
 
+- name: DEBUG
+  debug:
+    msg: RACK = {{ cassandra_rackdc_rack }}
+
+- name: Configure cassandra-rackdc.properties
+  become: yes
+  template:
+    src: cassandra-rackdc.properties.j2
+    dest: /etc/cassandra/cassandra-rackdc.properties
+
 - name: Start Cassandra
   become: yes
   service:
