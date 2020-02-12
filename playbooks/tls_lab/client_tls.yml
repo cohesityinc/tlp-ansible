@@ -1,0 +1,76 @@
+---
+- name: Create Client CA and truststore
+  hosts: master
+  connection: local
+  gather_facts: False
+  vars:
+   ca_dir: /tmp/cassandra-tls-lab/clients
+   ca_name: ClientCA
+  roles:
+    - tls_truststore
+
+- name: Create Cassandra CA and truststore
+  hosts: master
+  connection: local
+  gather_facts: False
+  vars:
+   ca_dir: /tmp/cassandra-tls-lab/cassandra
+   ca_name: CassandraCA
+  roles:
+    - tls_truststore
+
+- name: Import Client CA cert into node truststore
+  hosts: master
+  connection: local
+  gather_facts: False
+  vars:
+    only_import_cert: True
+    ca_dir: /tmp/cassandra-tls-lab/cassandra
+    ca_name: ClientCA
+    ca_cert: /tmp/cassandra-tls-lab/clients/ca.crt
+  roles:
+    - tls_truststore
+
+- name: Import Cassandra CA cert into client truststore
+  hosts: master
+  connection: local
+  gather_facts: False
+  vars:
+    only_import_cert: True
+    ca_dir: /tmp/cassandra-tls-lab/clients
+    ca_name: CassandraCA
+    ca_cert: /tmp/cassandra-tls-lab/cassandra/ca.crt
+  roles:
+    - tls_truststore
+
+- name: Create client keystores
+  hosts: clients
+  gather_facts: False
+  connection: local
+  vars:
+    ca_dir: /tmp/cassandra-tls-lab/clients
+    ca_name: ClientCA
+    ssl_extensions_enabled: False
+  roles:
+    - tls_keystore
+
+- name: Create node keystores
+  hosts: cassandra_nodes
+  gather_facts: False
+  connection: local
+  vars:
+    ca_dir: /tmp/cassandra-tls-lab/cassandra
+    ca_name: CassandraCA
+    ssl_extensions_enabled: False
+  roles:
+    - tls_keystore
+
+#- name: Update node configurations
+#  hosts: cassandra_nodes
+#  gather_facts: True
+#  vars:
+#    cluster_name: tlp_lab
+#    internode_encryption_enabled: True
+#  roles:
+#    - node_keystores
+#    - cassandra_configuration

@@ -1,0 +1,4 @@
+ca_name: CassandraClusterCA
+ca_dir: /tmp/cassandra-tls-lab/cassandra
+
+only_import_cert: False

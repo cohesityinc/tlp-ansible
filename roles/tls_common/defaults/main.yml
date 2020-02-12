@@ -3,6 +3,15 @@ cassandra_ca_key: "{{ cassandra_ca_dir }}/ca.key"
 cassandra_ca_cert: "{{ cassandra_ca_dir }}/ca.crt"
 cassandra_truststore: "{{ cassandra_ca_dir }}/truststore.p12"
 
+client_ca_dir: /tmp/cassandra-tls-lab/client
+client_ca_key: "{{ client_ca_dir }}/ca.key"
+client_ca_cert: "{{ client_ca_dir }}/ca.crt"
+client_truststore: "{{ client_ca_dir }}/truststore.p12"
+
+ca_key: "{{ ca_dir }}/ca.key"
+ca_cert: "{{ ca_dir }}/ca.crt"
+ca_truststore: "{{ ca_dir }}/truststore.p12"
+
 ssl_conf_output_password: cassandra
 ssl_conf_default_bits: 2048
 ssl_extensions_enabled: False

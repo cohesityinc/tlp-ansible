@@ -1,0 +1,32 @@
+---
+- import_role:
+    name: tls_common
+
+- name: Create CA directory
+  file:
+    path: "{{ ca_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Create CA configuration file
+  template:
+    src: roles/tls_common/templates/ssl.cnf.j2
+    dest: "{{ ca_dir }}/ssl.cnf"
+
+- name: Generate CA certificate
+  shell: "openssl req -config ssl.cnf -new -x509 -keyout {{ ca_key }} -out {{ ca_cert }} -days 365"
+  args:
+    chdir: "{{ ca_dir }}"
+    executable: /bin/bash
+  when: not only_import_cert
+
+- stat:
+    path: "{{ ca_truststore }}"
+  register: truststore_result
+
+- name: Import CA certificate to truststore
+  shell: "keytool -keystore truststore.p12 -alias {{ ca_name }} -importcert -file {{ ca_cert }} -keypass cassandra -storepass cassandra -storetype pkcs12 -noprompt"
+  args:
+    chdir: "{{ ca_dir }}"
+    executable: /bin/bash
+  when: truststore_result.stat.exists == false or only_import_cert

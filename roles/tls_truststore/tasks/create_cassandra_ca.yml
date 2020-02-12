@@ -1,0 +1,20 @@
+- name: Create CassandraCA directory
+  file:
+    path: "{{ cassandra_ca_dir }}"
+    state: directory
+    mode: '0755'
+
+- set_fact:
+    ssl_conf_dn_common_name: CassandraCA
+
+- name: Create CassandraCA configuration file
+  template:
+    src: roles/tls_common/templates/ssl.cnf.j2
+    dest: "{{ cassandra_ca_dir }}/ssl.cnf"
+
+- name: Generate CassandraCA certificate
+  shell: "openssl req -config ssl.cnf -new -x509 -keyout {{ cassandra_ca_key }} -out {{ cassandra_ca_cert }} -days 365"
+  args:
+    chdir: "{{ cassandra_ca_dir }}"
+    executable: /bin/bash
+  
