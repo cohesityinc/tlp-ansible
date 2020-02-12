@@ -2,6 +2,9 @@
 required_vars:
   - cluster_name
 
+##############################
+# cassandra.yaml properties  #
+##############################
 num_tokens: 256
 hinted_handoff_enabled: true
 max_hint_window_in_ms: 10800000
@@ -28,16 +31,28 @@ young_gen_heap_size_mb: "{{ raw_heap_size | int // 2 }}M"
 
 internode_encryption_enabled: false
 
-server_encryption_options:
-  internode_encryption: none
-  keystore: conf/.keystore
-  keystore_password: cassandra
-  truststore: conf/.truststore
-  truststore_password: cassandra
-  store_type: JKS
-  require_client_auth: false
-  require_endpoint_verification: false
+server_encryption_internode_encryption: none
+server_encryption_keystore: conf/.keystore
+server_encryption_keystore_password: cassandra
+server_encryption_truststore: conf/.truststore
+server_encryption_truststore_password: cassandra
+server_encryption_store_type: JKS
+server_encryption_require_client_auth: false
 
-# cassandra-rackdc.properties
+# Added in C* 3.6. See CASSANDRA-9220 for details.
+server_encryption_require_endpoint_verification: false
+
+client_encryption_enabled: false
+client_encryption_optional: false
+client_encryption_keystore: conf/.keystore
+client_encryption_keystore_password: cassandra
+client_encryption_require_client_auth: false
+client_encryption_truststore: conf/.truststore
+client_encryption_truststore_password: cassandra
+client_encryption_store_type: JKS
+
+###############################
+# cassandra-rackdc.properties #
+###############################
 cassandra_rackdc_dc: dc1
 cassandra_rackdc_rack: rack1

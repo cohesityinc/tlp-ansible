@@ -1031,34 +1031,34 @@ request_scheduler: org.apache.cassandra.scheduler.NoScheduler
 # http://download.oracle.com/javase/6/docs/technotes/guides/security/jsse/JSSERefGuide.html#CreateKeystore
 #
 server_encryption_options:
-    internode_encryption: {{ server_encryption_options['internode_encryption'] }}
-    keystore: {{ server_encryption_options['keystore'] }}
-    keystore_password: {{ server_encryption_options['keystore_password'] }}
-    truststore: {{ server_encryption_options['truststore'] }}
-    truststore_password: {{ server_encryption_options['truststore_password'] }}
+    internode_encryption: {{ server_encryption_internode_encryption }}
+    keystore: {{ server_encryption_keystore }}
+    keystore_password: {{ server_encryption_keystore_password }}
+    truststore: {{ server_encryption_truststore }}
+    truststore_password: {{ server_encryption_truststore_password }}
     # More advanced defaults below:
     # protocol: TLS
     # algorithm: SunX509
-    store_type: {{ server_encryption_options['store_type'] }}
+    store_type: {{ server_encryption_store_type }}
     # cipher_suites: [TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA]
-    require_client_auth: {{ server_encryption_options['require_client_auth'] }}
-    require_endpoint_verification: {{ server_encryption_options['require_endpoint_verification'] }}
+    require_client_auth: {{ server_encryption_require_client_auth }}
+    require_endpoint_verification: {{ server_encryption_require_endpoint_verification }}
 
 # enable or disable client/server encryption.
 client_encryption_options:
-    enabled: false
+    enabled: {{ client_encryption_enabled }}
     # If enabled and optional is set to true encrypted and unencrypted connections are handled.
-    optional: false
-    keystore: conf/.keystore
-    keystore_password: cassandra
-    # require_client_auth: false
+    optional: {{ client_encryption_optional }}
+    keystore: {{ client_encryption_keystore }}
+    keystore_password: {{ client_encryption_keystore_password }}
+    require_client_auth: {{ client_encryption_require_client_auth }}
     # Set trustore and truststore_password if require_client_auth is true
-    # truststore: conf/.truststore
-    # truststore_password: cassandra
+    truststore: {{ client_encryption_truststore }}
+    truststore_password: {{ client_encryption_truststore_password }}
     # More advanced defaults below:
     # protocol: TLS
     # algorithm: SunX509
-    # store_type: JKS
+    store_type: {{ client_encryption_store_type }}
     # cipher_suites: [TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA]
 
 # internode_compression controls whether traffic between nodes is
