@@ -1,0 +1,55 @@
+---
+- name: Stop Cassandra (if running)
+  service:
+    name: cassandra
+    state: stopped
+
+- name: Delete data directories
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items: "{{ data_files_dirs }}"
+
+- name: Create data directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: cassandra
+    mode: 0755
+  with_items: "{{ data_files_dirs }}"
+
+- name: Delete commit log directory
+  file:
+    path: "{{ commitlog_dir }}"
+    state: absent
+
+- name: Create commit log directory
+  file:
+    path: "{{ commitlog_dir }}"
+    state: directory
+    owner: cassandra
+    mode: 0755
+
+- name: Delete saved caches directory
+  file:
+    path: "{{ saved_caches_dir }}"
+    state: absent
+
+- name: Create saved caches directory
+  file:
+    path: "{{ saved_caches_dir }}"
+    state: directory
+    owner: cassandra
+    mode: 0755
+
+- name: Delete hints directory
+  file:
+    path: "{{ hints_dir }}"
+    state: absent
+
+- name: Create hints directory
+  file:
+    path: "{{ hints_dir }}"
+    state: directory
+    owner: cassandra
+    mode: 0755

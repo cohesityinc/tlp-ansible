@@ -1,0 +1,10 @@
+---
+- name: Reset environment
+  hosts: cassandra_nodes
+  gather_facts: True
+  become: yes
+  vars:
+    reset_cassandra: true
+    skip_update_config: true
+  roles:
+    - cassandra_configuration

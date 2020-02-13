@@ -29,8 +29,7 @@ raw_heap_size: "{{ ansible_memtotal_mb | int // 4 }}"
 heap_size_mb: "{{ raw_heap_size }}M"
 young_gen_heap_size_mb: "{{ raw_heap_size | int // 2 }}M"
 
-internode_encryption_enabled: false
-
+# The available internode options are : all, none, dc, rack
 server_encryption_internode_encryption: none
 server_encryption_keystore: conf/.keystore
 server_encryption_keystore_password: cassandra

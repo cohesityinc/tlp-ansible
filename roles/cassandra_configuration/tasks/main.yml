@@ -1,41 +1,8 @@
 ---
-- name: Create facts
-  set_fact: 
-    seeds: "{{ groups['cassandra_nodes'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | join(',') }}"
-    node_ip: "{{ ansible_default_ipv4.address }}"
+- name: Reset node
+  include_tasks: reset.yml
+  when: reset_cassandra
 
-# TODO Find a better, more flexible way for conditionally setting encryption options
-- name: Create internode encryption facts
-  set_fact:
-    server_encryption_options:
-      internode_encryption: all
-      keystore: /etc/cassandra/keystore.p12
-      keystore_password: cassandra
-      truststore: /etc/cassandra/truststore.p12
-      truststore_password: cassandra
-      require_client_auth: true
-      require_endpoint_verification: true 
-      store_type: PKCS12
-  when: internode_encryption_enabled is defined
-
-- name: Generate cassandra.yaml
-  become: yes
-  template:
-    src: "cassandra-{{ cassandra_version }}.yaml.j2"
-    dest: /etc/cassandra/cassandra.yaml
-
-- name: DEBUG
-  debug:
-    msg: RACK = {{ cassandra_rackdc_rack }}
-
-- name: Configure cassandra-rackdc.properties
-  become: yes
-  template:
-    src: cassandra-rackdc.properties.j2
-    dest: /etc/cassandra/cassandra-rackdc.properties
-
-- name: Start Cassandra
-  become: yes
-  service:
-    name: cassandra
-    state: restarted
+- name: Update node configuration
+  include_tasks: update_config.yml
+  when: skip_update_config is not defined
