@@ -65,12 +65,17 @@
   roles:
     - tls_keystore
 
-#- name: Update node configurations
-#  hosts: cassandra_nodes
-#  gather_facts: True
-#  vars:
-#    cluster_name: tlp_lab
-#    internode_encryption_enabled: True
-#  roles:
-#    - node_keystores
-#    - cassandra_configuration
+- name: Enable client encryption (optional)
+  hosts: cassandra_nodes
+  gather_facts: True
+  vars:
+    ca_dir: /tmp/cassandra-tls-lab/cassandra
+    cluster_name: tlp_lab
+    client_encryption_enabled: true
+    client_encryption_optional: true
+    client_encryption_keystore: /etc/cassandra/keystore.p12
+    client_encryption_truststore: /etc/cassandra/keystore.p12
+    client_encryption_store_type: PKCS12
+  roles:
+    #- node_keystores
+    - cassandra_configuration
