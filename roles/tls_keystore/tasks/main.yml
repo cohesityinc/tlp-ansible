@@ -1,0 +1,14 @@
+---
+- import_role:
+    name: tls_common
+
+- set_fact:
+    working_dir: "{{ ca_dir }}/{{ inventory_hostname }}"
+
+- name: Check if keystore exists
+  stat:
+    path: "{{ working_dir}}/keystore.p12"
+  register: keystore_stat_result
+
+- include_tasks: create_keystore.yml
+  when: keystore_stat_result.stat.exists == false

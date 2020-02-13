@@ -1,0 +1,17 @@
+---
+- import_role:
+    name: tls_common
+
+# This is somewhat of a hack. The tasks in create_truststore.yml directly
+# invoke openssl and are not idempotent. Rerunning a playbook consecutive times
+# will result in an error. For now we simply check if the truststore exists to
+# prevent errors. A better, more robust solution would be to use Ansible's
+# crypto tasks.
+
+- name: Check if truststore exists
+  stat:
+    path: "{{ ca_truststore}}"
+  register: truststore_stat_result
+
+- include_tasks: create_truststore.yml
+  when: truststore_stat_result.stat.exists == false or (tls_import_ca_cert | bool)
