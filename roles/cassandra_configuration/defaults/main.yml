@@ -10,6 +10,9 @@ required_vars:
 # all data from it. Use with caution!
 reset_cassandra: False
 
+# By default restart Cassandra after applying configuration changes.
+restart_cassandra_after_config_update: True
+
 ##############################
 # cassandra.yaml properties  #
 ##############################

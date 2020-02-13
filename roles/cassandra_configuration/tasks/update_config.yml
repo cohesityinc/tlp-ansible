@@ -35,3 +35,4 @@
   service:
     name: cassandra
     state: restarted
+  when: restart_cassandra_after_config_update | bool
