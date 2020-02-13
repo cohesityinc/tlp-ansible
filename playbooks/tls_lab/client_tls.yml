@@ -28,6 +28,7 @@
     ca_dir: /tmp/cassandra-tls-lab/cassandra
     ca_name: ClientCA
     ca_cert: /tmp/cassandra-tls-lab/clients/ca.crt
+    tls_import_ca_cert: True
   roles:
     - tls_truststore
 
@@ -40,6 +41,7 @@
     ca_dir: /tmp/cassandra-tls-lab/clients
     ca_name: CassandraCA
     ca_cert: /tmp/cassandra-tls-lab/cassandra/ca.crt
+    tls_import_ca_cert: True
   roles:
     - tls_truststore
 
@@ -65,17 +67,16 @@
   roles:
     - tls_keystore
 
-- name: Enable client encryption (optional)
+- name: Enable client encryption
   hosts: cassandra_nodes
   gather_facts: True
   vars:
     ca_dir: /tmp/cassandra-tls-lab/cassandra
     cluster_name: tlp_lab
     client_encryption_enabled: true
-    client_encryption_optional: true
+    client_encryption_optional: false
     client_encryption_keystore: /etc/cassandra/keystore.p12
-    client_encryption_truststore: /etc/cassandra/keystore.p12
+    client_encryption_truststore: /etc/cassandra/truststore.p12
     client_encryption_store_type: PKCS12
   roles:
-    #- node_keystores
     - cassandra_configuration

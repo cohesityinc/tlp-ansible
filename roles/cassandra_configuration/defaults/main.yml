@@ -2,6 +2,14 @@
 required_vars:
   - cluster_name
 
+#############
+#  CAUTION  #
+#############
+#
+# Setting reset_cassandra to true will stop the node and purge
+# all data from it. Use with caution!
+reset_cassandra: False
+
 ##############################
 # cassandra.yaml properties  #
 ##############################

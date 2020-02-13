@@ -1,7 +1,7 @@
 ---
 - name: Reset node
   include_tasks: reset.yml
-  when: reset_cassandra
+  when: reset_cassandra | bool
 
 - name: Update node configuration
   include_tasks: update_config.yml

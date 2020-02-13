@@ -1,7 +1,4 @@
 ---
-- import_role:
-    name: tls_common
-
 - name: Create CA directory
   file:
     path: "{{ ca_dir }}"

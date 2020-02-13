@@ -1,20 +1,34 @@
 ---
-- name: Create Cassandra CA
+- name: Create Cassandra CA and truststore
   hosts: master
   connection: local
   gather_facts: False
   vars:
-    tls_reset: True
+   ca_dir: /tmp/cassandra-tls-lab/cassandra
+   ca_name: CassandraCA
   roles:
-    - tls_delete
-    - cassandra_ca
+    - tls_truststore
 
-- name: Update node configurations
+- name: Create node keystores
+  hosts: cassandra_nodes
+  gather_facts: False
+  connection: local
+  vars:
+    ca_dir: /tmp/cassandra-tls-lab/cassandra
+    ca_name: CassandraCA
+    ssl_extensions_enabled: False
+  roles:
+    - tls_keystore
+
+- name: Enable internode encryption
   hosts: cassandra_nodes
   gather_facts: True
   vars:
+    ca_dir: /tmp/cassandra-tls-lab/cassandra
     cluster_name: tlp_lab
-    internode_encryption_enabled: True
+    server_encryption_internode_encryption: all
+    server_encryption_keystore: /etc/cassandra/keystore.p12
+    server_encryption_truststore: /etc/cassandra/truststore.p12
+    server_encryption_store_type: PKCS12
   roles:
-    - node_keystores
     - cassandra_configuration
